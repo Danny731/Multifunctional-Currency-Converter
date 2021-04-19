@@ -5,6 +5,7 @@
 #include<string>
 #include<algorithm>
 #include<iomanip>
+#include<vector>
 
 using std::string;
 using std::cout;
@@ -55,79 +56,91 @@ string get_url_contents(string theurl) {
 
 float get_accurate_exchangeRate(string source,string resp, string target) {
   float exchangeRate;
+  std::vector<int> pos;
   resp.erase(std::remove_if(resp.begin(), resp.end(), isalpha), resp.end());
   resp.erase(std::remove_if(resp.begin(), resp.end(), isspace), resp.end());
+
+  string flag=",";
+  int position=0;
+  int i=1;
+
+  while((position=resp.find(flag,position))!=string::npos) {
+      pos.push_back(position);
+      position++;
+      i++;
+  }
+
   if(source == "EUR") {
     if (target == "GBP")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
     else if (target == "CAD")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
     else if (target == "USD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
     else if (target == "CNY")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
     else if (target == "AUD")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   if(source == "GBP") {
     if (target == "EUR")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
     else if (target == "CAD")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
     else if (target == "USD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
     else if (target == "CNY")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
     else if (target == "AUD")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   if(source == "CAD") {
       if (target == "EUR")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
       if (target == "GBP")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
       if (target == "USD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
       if (target == "CNY")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
       if (target == "AUD")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   if(source == "USD") {
       if (target == "EUR")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
       if (target == "GBP")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
       if (target == "CAD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
       if (target == "CNY")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
       if (target == "AUD")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   if(source == "CNY") {
       if (target == "EUR")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
       if (target == "GBP")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
       if (target == "CAD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
       if (target == "USD")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
       if (target == "AUD")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   if(source == "AUD") {
       if (target == "EUR")
-        exchangeRate = std::stof(resp.substr(60,7));
+        exchangeRate = std::stof(resp.substr(60,pos.at(5)-61));
       if (target == "GBP")
-        exchangeRate = std::stof(resp.substr(72,7));
+        exchangeRate = std::stof(resp.substr(pos.at(5)+4,pos.at(6)-pos.at(5)-4));
       if (target == "CAD")
-        exchangeRate = std::stof(resp.substr(84,7));
+        exchangeRate = std::stof(resp.substr(pos.at(6)+4,pos.at(7)-pos.at(6)-4));
       if (target == "USD")
-        exchangeRate = std::stof(resp.substr(96,7));
+        exchangeRate = std::stof(resp.substr(pos.at(7)+4,pos.at(8)-pos.at(7)-4));
       if (target == "CNY")
-        exchangeRate = std::stof(resp.substr(108,7));
+        exchangeRate = std::stof(resp.substr(pos.at(8)+4,4));
   }
   
   return exchangeRate;
