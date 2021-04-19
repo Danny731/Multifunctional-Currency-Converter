@@ -139,19 +139,17 @@ float currency_translation(float source_amount, float exchangeRate) {
 }
 
 int main() {
-  string source, url, resp, target;
+  string source, url, resp, target,ex;
 
   float source_amount,exchangeRate,target_amount;
-  cout << "Choose a source currency. Commands: " << "\n";
-  cout << "CNY,USD,GBP,EUR,AUD,CAD"<< "\n";
-  cin >> source;
-  cout << "Choose a currency you want to translate to:" << "\n";
-  cin >> target;
-  cout << "How much source currency do you have: " << "\n";
-  cin >> source_amount;
+  source = "CNY";
+  target = "GBP";
+  source_amount = 100;
+
   url = get_source_url(source);  
   resp = get_url_contents(url);
   exchangeRate = get_accurate_exchangeRate(source,resp,target);
+  cout << exchangeRate << "\n";
   target_amount = currency_translation(source_amount,exchangeRate);
   cout << "You have " << target_amount << target << "\n";
   return 0;
