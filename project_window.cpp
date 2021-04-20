@@ -7,6 +7,7 @@
 using std::to_string;
 using std::string;
 using std::cout;
+using std::endl;
 
 int main() {
   double USD, CNY, GBP, EUR, AUD, CAD;
@@ -22,6 +23,18 @@ int main() {
   //set texture
   sf::Texture usaflag;
   usaflag.loadFromFile("/home/ece-student/project/usa.jpeg");
+  sf::Texture chinaflag;
+  chinaflag.loadFromFile("/home/ece-student/project/china.jpeg");
+  sf::Texture ukflag;
+  ukflag.loadFromFile("/home/ece-student/project/uk.jpeg");
+  sf::Texture eurflag;
+  eurflag.loadFromFile("/home/ece-student/project/eur.jpeg");
+  sf::Texture ausflag;
+  ausflag.loadFromFile("/home/ece-student/project/aus.jpeg");
+  sf::Texture caflag;
+  caflag.loadFromFile("/home/ece-student/project/canada.jpeg");
+  
+ 
   // set currency name
   sf::Text cur_1;
   sf::Text cur_2;
@@ -85,16 +98,37 @@ int main() {
   l3.setFillColor(sf::Color::Black);
   l4.setFillColor(sf::Color::Black);
   l5.setFillColor(sf::Color::Black);
-  l1.setPosition(0, 40);
-  l2.setPosition(0, 90);
-  l3.setPosition(0, 140);
-  l4.setPosition(0, 190);
-  l5.setPosition(0, 240);
+  l1.setPosition(0, 45);
+  l2.setPosition(0, 95);
+  l3.setPosition(0, 145);
+  l4.setPosition(0, 195);
+  l5.setPosition(0, 245);
 
   //set flag pics
   sf::Sprite usaf;
-  usaf.setPosition(0,20);
-
+  usaf.setTexture(usaflag);
+  usaf.scale(sf::Vector2f(0.1155f,0.115f));
+  usaf.setPosition(1,19);
+  sf::Sprite chinaf;
+  chinaf.setTexture(chinaflag);
+  chinaf.scale(sf::Vector2f(0.072f,0.072f));
+  chinaf.setPosition(0.5,69);
+  sf::Sprite ukf;
+  ukf.setTexture(ukflag);
+  ukf.scale(sf::Vector2f(0.0355f,0.05f));
+  ukf.setPosition(0.5,119);
+  sf::Sprite eurf;
+  eurf.setTexture(eurflag);
+  eurf.scale(sf::Vector2f(0.045f,0.045f));
+  eurf.setPosition(0.5,169);
+  sf::Sprite ausf;
+  ausf.setTexture(ausflag);
+  ausf.scale(sf::Vector2f(0.06f,0.075f));
+  ausf.setPosition(0.5,219);
+  sf::Sprite caf;
+  caf.setTexture(caflag);
+  caf.scale(sf::Vector2f(0.093f,0.085f));
+  caf.setPosition(0.5,269);
 
 
 
@@ -107,10 +141,7 @@ int main() {
       if (event.type == sf::Event::Closed)
         window.close();
     }
-    //  words.setString(to_string(now.tm_hour) + ":" +
-    //  to_string(now.tm_min) + ":" + to_string(now.tm_sec));
-
-
+    
 
     window.draw(background);
     window.draw(l1);
@@ -126,6 +157,11 @@ int main() {
     window.draw(cur_5);
     window.draw(cur_6);
     window.draw(usaf);
+    window.draw(chinaf);
+    window.draw(ukf);
+    window.draw(eurf);
+    window.draw(ausf);
+    window.draw(caf);
     window.display();
 
   }
