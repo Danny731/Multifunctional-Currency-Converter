@@ -20,19 +20,19 @@ int main() {
   //set font
   sf::Font font;
   font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
-  //set texture
+  //set texture (make sure the pictures are in the same directory as this file!)
   sf::Texture usaflag;
-  usaflag.loadFromFile("/home/ece-student/project/usa.jpeg");
+  usaflag.loadFromFile("usa.jpeg");
   sf::Texture chinaflag;
-  chinaflag.loadFromFile("/home/ece-student/project/china.jpeg");
+  chinaflag.loadFromFile("china.jpeg");
   sf::Texture ukflag;
-  ukflag.loadFromFile("/home/ece-student/project/uk.jpeg");
+  ukflag.loadFromFile("uk.jpeg");
   sf::Texture eurflag;
-  eurflag.loadFromFile("/home/ece-student/project/eur.jpeg");
+  eurflag.loadFromFile("eur.jpeg");
   sf::Texture ausflag;
-  ausflag.loadFromFile("/home/ece-student/project/aus.jpeg");
+  ausflag.loadFromFile("aus.jpeg");
   sf::Texture caflag;
-  caflag.loadFromFile("/home/ece-student/project/canada.jpeg");
+  caflag.loadFromFile("canada.jpeg");
   
  
   // set currency name
