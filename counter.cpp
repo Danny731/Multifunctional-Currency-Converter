@@ -16,16 +16,16 @@ int main() {
     //currency
     string currency;
     currency = "USD";
-
+    int currency_number = 1;
     // choose flag
     string selected_flag;
-    switch(currency) {
-      case "USD" : selected_flag = "usa.jpeg";
-      case "GBP" : selected_flag = "uk.jpeg";
-      case "CAD" : selected_flag = "canada.jpeg";
-      case "CNY" : selected_flag = "china.jpeg";
-      case "AUD" : selected_flag = "aus.jpeg";
-      case "EUR" : selected_flag = "eur.jpeg";
+    switch(currency_number) {
+      case 1 : selected_flag = "usa.jpeg";
+      case 2 : selected_flag = "uk.jpeg";
+      case 3 : selected_flag = "canada.jpeg";
+      case 4 : selected_flag = "china.jpeg";
+      case 5 : selected_flag = "aus.jpeg";
+      case 6 : selected_flag = "eur.jpeg";
     }
     
     // disp flag;
