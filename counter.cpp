@@ -54,12 +54,24 @@ int main() {
     string amount8 = "80000";
     string amount9 = "90000";
     string amount10 = "100000";
+
+    //make all currencies
+    string currency1 = "USD";
+    string currency2 = "EUR";
+    string currency3 = "USD";
+    string currency4 = "EUR";
+    string currency5 = "USD";
+    string currency6 = "EUR";
+    string currency7 = "USD";
+    string currency8 = "EUR";
+    string currency9 = "USD";
+    string currency10 = "EUR";
     
     // window
-	  sf::RenderWindow window(sf::VideoMode(300, 520), "Bean Counter");
+	  sf::RenderWindow window(sf::VideoMode(450, 520), "Bean Counter");
     
     // background
-    sf::RectangleShape background(sf::Vector2f(300, 520));
+    sf::RectangleShape background(sf::Vector2f(450, 520));
     background.setFillColor(sf::Color::White);
 
     // text font
@@ -67,19 +79,20 @@ int main() {
     font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
     
     // lines
-	  sf::RectangleShape l1(sf::Vector2f(300, 2));
-  	sf::RectangleShape l2(sf::Vector2f(300, 2));
-  	sf::RectangleShape l3(sf::Vector2f(300, 2));
- 	  sf::RectangleShape l4(sf::Vector2f(300, 2));
- 	  sf::RectangleShape l5(sf::Vector2f(300, 2));
-	  sf::RectangleShape l6(sf::Vector2f(300, 2));
-  	sf::RectangleShape l7(sf::Vector2f(300, 2));
-  	sf::RectangleShape l8(sf::Vector2f(300, 2));
- 	  sf::RectangleShape l9(sf::Vector2f(300, 2));
-    sf::RectangleShape l11(sf::Vector2f(300, 2));
-    sf::RectangleShape l12(sf::Vector2f(300, 2));
-    sf::RectangleShape l13(sf::Vector2f(300, 2));
+	  sf::RectangleShape l1(sf::Vector2f(450, 2));
+  	sf::RectangleShape l2(sf::Vector2f(450, 2));
+  	sf::RectangleShape l3(sf::Vector2f(450, 2));
+ 	  sf::RectangleShape l4(sf::Vector2f(450, 2));
+ 	  sf::RectangleShape l5(sf::Vector2f(450, 2));
+	  sf::RectangleShape l6(sf::Vector2f(450, 2));
+  	sf::RectangleShape l7(sf::Vector2f(450, 2));
+  	sf::RectangleShape l8(sf::Vector2f(450, 2));
+ 	  sf::RectangleShape l9(sf::Vector2f(450, 2));
+    sf::RectangleShape l11(sf::Vector2f(450, 2));
+    sf::RectangleShape l12(sf::Vector2f(450, 2));
+    sf::RectangleShape l13(sf::Vector2f(450, 2));
     sf::RectangleShape l10(sf::Vector2f(2,500));
+    sf::RectangleShape l14(sf::Vector2f(2,500));
   	l1.setFillColor(sf::Color::Black);
   	l2.setFillColor(sf::Color::Black);
   	l3.setFillColor(sf::Color::Black);
@@ -93,6 +106,7 @@ int main() {
     l12.setFillColor(sf::Color::Black);
     l13.setFillColor(sf::Color::Black);
   	l10.setFillColor(sf::Color::Black);
+    l14.setFillColor(sf::Color::Black);
   	l1.setPosition(0, 40);
   	l2.setPosition(0, 80);
   	l3.setPosition(0, 120);
@@ -106,40 +120,53 @@ int main() {
     l12.setPosition(0, 440);
     l13.setPosition(0, 480);
   	l10.setPosition(149,40);
+    l14.setPosition(299,40);
     
     // Fixed texts
     sf::Text Dates;
     sf::Text Amount;
     sf::Text Total;
     sf::Text Currency;
+    sf::Text Now_currency;
     Dates.setFont(font);
     Amount.setFont(font);
     Total.setFont(font);
     Currency.setFont(font);
+    Now_currency.setFont(font);
     Dates.setString("Dates");
     Amount.setString("Amounts");
     Total.setString("Total");
-    Currency.setString("Currency :");
+    Currency.setString("The Currency you are using is");
+    Now_currency.setString("Currency");
     Dates.setCharacterSize(25);
     Amount.setCharacterSize(25);
     Total.setCharacterSize(25);
     Currency.setCharacterSize(25);
+    Now_currency.setCharacterSize(25);
     Dates.setPosition(35, 45);
     Amount.setPosition(165, 45);
     Total.setPosition(33, 485);
-    Currency.setPosition(25,5);
+    Currency.setPosition(0,5);
+    Now_currency.setPosition(315,45);
     Dates.setFillColor(sf::Color::Black);
     Amount.setFillColor(sf::Color::Black);
     Total.setFillColor(sf::Color::Black);
     Currency.setFillColor(sf::Color::Black);
+    Now_currency.setFillColor(sf::Color::Black);
 
     //disp currency
     sf::Text currency_disp;
     currency_disp.setFont(font);
     currency_disp.setString(currency);
     currency_disp.setCharacterSize(25);
-    currency_disp.setPosition(200, 5);
+    currency_disp.setPosition(390, 5);
     currency_disp.setFillColor(sf::Color::Black);
+    sf::Text Total_currency;
+    Total_currency.setFont(font);
+    Total_currency.setString(currency);
+    Total_currency.setCharacterSize(25);
+    Total_currency.setPosition(360, 485);
+    Total_currency.setFillColor(sf::Color::Black);
     
     //Amounts
     sf::Text Amount1;
@@ -265,6 +292,68 @@ int main() {
     Date9.setFillColor(sf::Color::Black);
     Date10.setFillColor(sf::Color::Black);
 
+    //currencies
+    sf::Text Currency1;
+    sf::Text Currency2;
+    sf::Text Currency3;
+    sf::Text Currency4;
+    sf::Text Currency5;
+    sf::Text Currency6;
+    sf::Text Currency7;
+    sf::Text Currency8;
+    sf::Text Currency9;
+    sf::Text Currency10;
+    Currency1.setFont(font);
+    Currency2.setFont(font);
+    Currency3.setFont(font);
+    Currency4.setFont(font);
+    Currency5.setFont(font);
+    Currency6.setFont(font);
+    Currency7.setFont(font);
+    Currency8.setFont(font);
+    Currency9.setFont(font);
+    Currency10.setFont(font);
+    Currency1.setString(currency1);
+    Currency2.setString(currency2);
+    Currency3.setString(currency3);
+    Currency4.setString(currency4);
+    Currency5.setString(currency5);
+    Currency6.setString(currency6);
+    Currency7.setString(currency7);
+    Currency8.setString(currency8);
+    Currency9.setString(currency9);
+    Currency10.setString(currency10);
+    Currency1.setCharacterSize(25);
+    Currency2.setCharacterSize(25);
+    Currency3.setCharacterSize(25);
+    Currency4.setCharacterSize(25);
+    Currency5.setCharacterSize(25);
+    Currency6.setCharacterSize(25);
+    Currency7.setCharacterSize(25);
+    Currency8.setCharacterSize(25);
+    Currency9.setCharacterSize(25);
+    Currency10.setCharacterSize(25);
+    Currency1.setPosition(360, 85);
+    Currency2.setPosition(360, 125);
+    Currency3.setPosition(360, 165);
+    Currency4.setPosition(360, 205);
+    Currency5.setPosition(360, 245);
+    Currency6.setPosition(360, 285);
+    Currency7.setPosition(360, 325);
+    Currency8.setPosition(360, 365);
+    Currency9.setPosition(360, 405);
+    Currency10.setPosition(360, 445);
+    Currency1.setFillColor(sf::Color::Black);
+    Currency2.setFillColor(sf::Color::Black);
+    Currency3.setFillColor(sf::Color::Black);
+    Currency4.setFillColor(sf::Color::Black);
+    Currency5.setFillColor(sf::Color::Black);
+    Currency6.setFillColor(sf::Color::Black);
+    Currency7.setFillColor(sf::Color::Black);
+    Currency8.setFillColor(sf::Color::Black);
+    Currency9.setFillColor(sf::Color::Black);
+    Currency10.setFillColor(sf::Color::Black);
+
     //total amount
     float total_amount;
     string total_amount_disp;
@@ -298,12 +387,14 @@ int main() {
       window.draw(l11);
       window.draw(l12);
       window.draw(l13);
+      window.draw(l14);
     	window.draw(Dates);
     	window.draw(Amount);
     	window.draw(Total);
       window.draw(Currency);
       window.draw(currency_disp);
       window.draw(Total_amount_disp);
+      window.draw(Now_currency);
       window.draw(Date1);
       window.draw(Date2);
       window.draw(Date3);
@@ -324,6 +415,17 @@ int main() {
       window.draw(Amount8);
       window.draw(Amount9);
       window.draw(Amount10);
+      window.draw(Currency1);
+      window.draw(Currency2);
+      window.draw(Currency3);
+      window.draw(Currency4);
+      window.draw(Currency5);
+      window.draw(Currency6);
+      window.draw(Currency7);
+      window.draw(Currency8);
+      window.draw(Currency9);
+      window.draw(Currency10);
+      window.draw(Total_currency);
       
     	window.display();
     }
