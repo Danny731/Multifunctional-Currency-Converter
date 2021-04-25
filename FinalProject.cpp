@@ -1019,10 +1019,20 @@ int main() {
   int choice;
   cout << "Choose a mode: 1.Currency Convertor, 2.Tally book" << "\n";
   cin >> choice;
+
+  while (choice != 1 && choice != 2) {
+    cout << "Wrong Command, type 1 or 2 to enter the right mode!" << "\n";
+    cin >> choice;
+  }
+
   if(choice == 1) {
     cout << "Choose a source currency. Commands: " << "\n";
     cout << "CNY,USD,GBP,EUR,AUD,CAD" << "\n";
     cin >> source;
+    while(source != "CNY" && source != "USD" && source != "GBP" && source != "EUR" && source != "AUD" && source != "CAD") {
+      cout << "Wrong Command, try again!" << "\n";
+      cin >> source;
+    }
     cout << "How much source currency do you have: " << "\n";
     cin >> source_amount;
     set_transform_window(source, source_amount);
@@ -1033,6 +1043,7 @@ int main() {
     cout << "Type money with currency unit(format: xxxx currency): " << "\n";
     set_tallybook_window(target);
   }
+
 
   return 0;
 }
