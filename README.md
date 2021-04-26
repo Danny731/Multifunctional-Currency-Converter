@@ -12,4 +12,3 @@ How to include these libraries:
 # #include <SFML/Window.hpp>
 To compile this program after installing external libraries using: 
 # g++ Multifunctional-Currency-Converter.cpp -lcurl -lsfml-graphics -lsfml-window -lsfml-system
-
