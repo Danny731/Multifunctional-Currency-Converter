@@ -1223,7 +1223,7 @@ void set_mode1() {
 }
 
 void set_mode3() {
-  string s;
+string s;
   sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Selection Page");
 
   // background
@@ -1235,12 +1235,12 @@ void set_mode3() {
   font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
 
   sf::Text input;
-  sf::Text title;
-  title.setFont(font);
-  title.setString("Type money with currency unit:");
-  title.setFillColor(sf::Color::Black);
-  title.setCharacterSize(25);
-  title.setPosition(20, 105);
+  sf::Text words;
+  words.setFont(font);
+  words.setString("Type Money With Currency Unit (123 USD):");
+  words.setFillColor(sf::Color::Black);
+  words.setCharacterSize(20);
+  words.setPosition(20, 105);
   input.setCharacterSize(50);
   input.setFont(font);
   input.setPosition(115, 250);
