@@ -602,7 +602,7 @@ void set_tallybook_window(string target) {
   //make all amounts
   vector<string> amount;
   for (auto item : words)
-    amount.push_back(item.substr(0,item.find(' ')));
+    amount.push_back(item.substr(0, item.find(' ')));
   amount.resize(10);
   for (int j = 0; j < amount.size(); j++)
     if(amount.at(j) == "")
@@ -621,7 +621,7 @@ void set_tallybook_window(string target) {
   //make all currencies
   vector<string> CUR;
   for (auto item : words)
-    CUR.push_back(item.substr(item.find(' ')+1,3));
+    CUR.push_back(item.substr(item.find(' ') + 1, 3));
   CUR.resize(10);
   for (int j = 0; j < CUR.size(); j++)
     if(CUR.at(j) == "")
@@ -1145,7 +1145,7 @@ void set_mode1() {
   Amount_text.setCharacterSize(25);
   Amount_text.setPosition(70, 360);
   Amount_text.setFillColor(sf::Color::Black);
-  
+
   sf::Text infotext;
   infotext.setFont(font);
   infotext.setString("Click Enter After Typing");
@@ -1223,7 +1223,7 @@ void set_mode1() {
 }
 
 void set_mode3() {
-string s;
+  string s;
   sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Selection Page");
 
   // background
@@ -1235,12 +1235,12 @@ string s;
   font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
 
   sf::Text input;
-  sf::Text words;
-  words.setFont(font);
-  words.setString("Type Money With Currency Unit (123 USD):");
-  words.setFillColor(sf::Color::Black);
-  words.setCharacterSize(20);
-  words.setPosition(20, 105);
+  sf::Text title;
+  title.setFont(font);
+  title.setString("Type Money With Currency Unit (123 USD):");
+  title.setFillColor(sf::Color::Black);
+  title.setCharacterSize(20);
+  title.setPosition(20, 105);
   input.setCharacterSize(50);
   input.setFont(font);
   input.setPosition(115, 200);
@@ -1251,21 +1251,21 @@ string s;
   enterinfo.setString("Click Enter After Each Input");
   enterinfo.setFillColor(sf::Color::Black);
   enterinfo.setCharacterSize(20);
-  enterinfo.setPosition(68,325);
+  enterinfo.setPosition(68, 325);
 
   sf::Text maxinfo;
   maxinfo.setFont(font);
   maxinfo.setString("Only 10 Inputs Can Be Displayed");
   maxinfo.setFillColor(sf::Color::Black);
   maxinfo.setCharacterSize(20);
-  maxinfo.setPosition(60,400);
+  maxinfo.setPosition(60, 400);
 
   sf::Text info;
   info.setFont(font);
   info.setString("Close The Window When Finish Inputing");
   info.setFillColor(sf::Color::Black);
   info.setCharacterSize(20);
-  info.setPosition(40,474);
+  info.setPosition(40, 474);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -1274,7 +1274,7 @@ string s;
 
       if(event.type == sf::Event::Closed) {
         window.close();
-        
+
       }
 
       if (event.type == sf::Event::TextEntered) {
@@ -1288,27 +1288,27 @@ string s;
       }
 
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-         inputMoney.push_back(s);
+        inputMoney.push_back(s);
         s = "";
       }
 
 
       window.draw(background);
-      window.draw(words);
+      window.draw(title);
       window.draw(input);
       window.draw(info);
       window.draw(maxinfo);
       window.draw(enterinfo);
-      
+
 
 
     }
 
   }
   for (int i = 0; i < inputMoney.size(); i += 2)
-      words.push_back(inputMoney.at(i));
+    words.push_back(inputMoney.at(i));
   set_tallybook_window(target);
-  
+
 }
 
 void set_mode2() {
