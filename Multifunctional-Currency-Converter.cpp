@@ -1,4 +1,4 @@
-//Libraries included
+// Libraries included
 #include <curl/curl.h>
 #include <iostream>
 #include <string>
@@ -13,6 +13,11 @@ using std::cin;
 using std::to_string;
 using std::endl;
 using std::vector;
+
+string source, target, source_amount;
+vector<string> inputMoney;
+vector<string> words;
+
 //using library curl to get string response from internet using API
 size_t writeFunction(void *ptr, size_t size, size_t nmemb, std::string* data) {
   data->append((char*) ptr, size * nmemb);
@@ -576,11 +581,6 @@ void set_transform_window(string source, float source_amount) {
 
 //The function to display the tally book window
 void set_tallybook_window(string target) {
-  vector<string> words;
-  string m;
-  while(cin >> m) {
-    words.push_back(m);
-  }
   //currency
   string currency;
   currency = target;
@@ -601,8 +601,8 @@ void set_tallybook_window(string target) {
 
   //make all amounts
   vector<string> amount;
-  for (int i = 0; i < words.size(); i += 2)
-    amount.push_back(words.at(i));
+  for (auto item : words)
+    amount.push_back(item.substr(0,item.find(' ')));
   amount.resize(10);
   for (int j = 0; j < amount.size(); j++)
     if(amount.at(j) == "")
@@ -620,8 +620,8 @@ void set_tallybook_window(string target) {
 
   //make all currencies
   vector<string> CUR;
-  for (int i = 1; i < words.size(); i += 2)
-    CUR.push_back(words.at(i));
+  for (auto item : words)
+    CUR.push_back(item.substr(item.find(' ')+1,3));
   CUR.resize(10);
   for (int j = 0; j < CUR.size(); j++)
     if(CUR.at(j) == "")
@@ -1013,36 +1013,530 @@ void set_tallybook_window(string target) {
   }
 }
 
-int main() {
-  string source, target;
-  float source_amount;
-  int choice;
-  cout << "Choose a mode: 1.Currency Convertor, 2.Tally book" << "\n";
-  cin >> choice;
+void set_mode1() {
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Selection Page");
 
-  while (choice != 1 && choice != 2) {
-    cout << "Wrong Command, type 1 or 2 to enter the right mode!" << "\n";
-    cin >> choice;
-  }
+  // background
+  sf::RectangleShape background(sf::Vector2f(450, 520));
+  background.setFillColor(sf::Color::White);
 
-  if(choice == 1) {
-    cout << "Choose a source currency. Commands: " << "\n";
-    cout << "CNY,USD,GBP,EUR,AUD,CAD" << "\n";
-    cin >> source;
-    while(source != "CNY" && source != "USD" && source != "GBP" && source != "EUR" && source != "AUD" && source != "CAD") {
-      cout << "Wrong Command, try again!" << "\n";
-      cin >> source;
+  // text font
+  sf::Font font;
+  font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
+
+  //Grey blocks
+  sf::RectangleShape G1(sf::Vector2f(135, 45));
+  G1.setFillColor(sf::Color(195, 195, 195));
+  G1.setPosition(65, 135);
+  sf::RectangleShape G2(sf::Vector2f(135, 45));
+  G2.setFillColor(sf::Color(195, 195, 195));
+  G2.setPosition(65, 205);
+  sf::RectangleShape G3(sf::Vector2f(135, 45));
+  G3.setFillColor(sf::Color(195, 195, 195));
+  G3.setPosition(65, 275);
+  sf::RectangleShape G4(sf::Vector2f(135, 45));
+  G4.setFillColor(sf::Color(195, 195, 195));
+  G4.setPosition(245, 135);
+  sf::RectangleShape G5(sf::Vector2f(135, 45));
+  G5.setFillColor(sf::Color(195, 195, 195));
+  G5.setPosition(245, 205);
+  sf::RectangleShape G6(sf::Vector2f(135, 45));
+  G6.setFillColor(sf::Color(195, 195, 195));
+  G6.setPosition(245, 275);
+
+
+
+  sf::Texture usaflag;
+  usaflag.loadFromFile("usa.jpeg");
+  sf::Texture chinaflag;
+  chinaflag.loadFromFile("china.jpeg");
+  sf::Texture ukflag;
+  ukflag.loadFromFile("uk.jpeg");
+  sf::Texture eurflag;
+  eurflag.loadFromFile("eur.jpeg");
+  sf::Texture ausflag;
+  ausflag.loadFromFile("aus.jpeg");
+  sf::Texture caflag;
+  caflag.loadFromFile("canada.jpeg");
+
+  sf::Sprite usaf;
+  usaf.setTexture(usaflag);
+  usaf.scale(sf::Vector2f(0.170f, 0.167f));
+  usaf.setPosition(135, 210);
+  sf::Sprite chinaf;
+  chinaf.setTexture(chinaflag);
+  chinaf.scale(sf::Vector2f(0.107f, 0.107f));
+  chinaf.setPosition(135, 140);
+  sf::Sprite ukf;
+  ukf.setTexture(ukflag);
+  ukf.scale(sf::Vector2f(0.053f, 0.067f));
+  ukf.setPosition(135, 280);
+  sf::Sprite eurf;
+  eurf.setTexture(eurflag);
+  eurf.scale(sf::Vector2f(0.065f, 0.063f));
+  eurf.setPosition(315, 140);
+  sf::Sprite ausf;
+  ausf.setTexture(ausflag);
+  ausf.scale(sf::Vector2f(0.09f, 0.109f));
+  ausf.setPosition(315, 210);
+  sf::Sprite caf;
+  caf.setTexture(caflag);
+  caf.scale(sf::Vector2f(0.138f, 0.112f));
+  caf.setPosition(315, 280);
+
+  sf::Text input;
+  input.setFont(font);
+  input.setCharacterSize(25);
+  input.setPosition(200, 400);
+  input.setFillColor(sf::Color::Black);
+
+  sf::Text Source_c_text;
+  Source_c_text.setFont(font);
+  Source_c_text.setString("Please Choose Your Source Currency");
+  Source_c_text.setCharacterSize(25);
+  Source_c_text.setPosition(10, 70);
+  Source_c_text.setFillColor(sf::Color::Black);
+
+  sf::Text CNY_text;
+  CNY_text.setFont(font);
+  CNY_text.setString("CNY");
+  CNY_text.setCharacterSize(25);
+  CNY_text.setPosition(70, 140);
+  CNY_text.setFillColor(sf::Color::Black);
+
+  sf::Text USD_text;
+  USD_text.setFont(font);
+  USD_text.setString("USD");
+  USD_text.setCharacterSize(25);
+  USD_text.setPosition(70, 210);
+  USD_text.setFillColor(sf::Color::Black);
+
+  sf::Text GBP_text;
+  GBP_text.setFont(font);
+  GBP_text.setString("GBP");
+  GBP_text.setCharacterSize(25);
+  GBP_text.setPosition(70, 280);
+  GBP_text.setFillColor(sf::Color::Black);
+
+  sf::Text EUR_text;
+  EUR_text.setFont(font);
+  EUR_text.setString("EUR");
+  EUR_text.setCharacterSize(25);
+  EUR_text.setPosition(250, 140);
+  EUR_text.setFillColor(sf::Color::Black);
+
+  sf::Text AUD_text;
+  AUD_text.setFont(font);
+  AUD_text.setString("AUD");
+  AUD_text.setCharacterSize(25);
+  AUD_text.setPosition(250, 210);
+  AUD_text.setFillColor(sf::Color::Black);
+
+  sf::Text CAD_text;
+  CAD_text.setFont(font);
+  CAD_text.setString("CAD");
+  CAD_text.setCharacterSize(25);
+  CAD_text.setPosition(250, 280);
+  CAD_text.setFillColor(sf::Color::Black);
+
+  sf::Text Amount_text;
+  Amount_text.setFont(font);
+  Amount_text.setString("Please Input Your Amount");
+  Amount_text.setCharacterSize(25);
+  Amount_text.setPosition(70, 360);
+  Amount_text.setFillColor(sf::Color::Black);
+
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed)
+        window.close();
+      if(event.type == sf::Event::MouseButtonPressed) {
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 135 && event.mouseButton.y <= 180 ))
+          source = "CNY";
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 205 && event.mouseButton.y <= 250 ))
+          source = "USD";
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 275 && event.mouseButton.y <= 320 ))
+          source = "GBP";
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 135 && event.mouseButton.y <= 180 ))
+          source = "EUR";
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 205 && event.mouseButton.y <= 250 ))
+          source = "AUD";
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 275 && event.mouseButton.y <= 320 ))
+          source = "CAD";
+      }
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+        window.close();
+        set_transform_window(source, stof(source_amount));
+      }
+
+      if (event.type == sf::Event::TextEntered) {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Backspace) && source_amount.size() != 0) {
+          source_amount.pop_back();
+          input.setString(source_amount);
+        } else if (event.text.unicode < 128) {
+          source_amount.push_back((char)event.text.unicode);
+          input.setString(source_amount);
+        }
+      }
+
+
+
+
+      window.draw(background);
+      window.draw(Source_c_text);
+      window.draw(G1);
+      window.draw(G2);
+      window.draw(G3);
+      window.draw(G4);
+      window.draw(G5);
+      window.draw(G6);
+      window.draw(CNY_text);
+      window.draw(USD_text);
+      window.draw(GBP_text);
+      window.draw(EUR_text);
+      window.draw(AUD_text);
+      window.draw(CAD_text);
+      window.draw(usaf);
+      window.draw(chinaf);
+      window.draw(ukf);
+      window.draw(eurf);
+      window.draw(ausf);
+      window.draw(caf);
+      window.draw(Amount_text);
+      window.draw(input);
+      window.display();
+
     }
-    cout << "How much source currency do you have: " << "\n";
-    cin >> source_amount;
-    set_transform_window(source, source_amount);
-  } else if(choice == 2) {
-    cout << "Choose a target currency. Commands: " << "\n";
-    cout << "CNY,USD,GBP,EUR,AUD,CAD" << "\n";
-    cin >> target;
-    cout << "Type money with currency unit(format: xxxx currency): " << "\n";
-    set_tallybook_window(target);
+
   }
+
+}
+
+void set_mode3() {
+  string s;
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Selection Page");
+
+  // background
+  sf::RectangleShape background(sf::Vector2f(450, 520));
+  background.setFillColor(sf::Color::White);
+
+  // text font
+  sf::Font font;
+  font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
+
+  sf::Text input;
+  sf::Text title;
+  title.setFont(font);
+  title.setString("Type money with currency unit:");
+  title.setFillColor(sf::Color::Black);
+  title.setCharacterSize(25);
+  title.setPosition(20, 105);
+  input.setCharacterSize(50);
+  input.setFont(font);
+  input.setPosition(115, 250);
+  input.setFillColor(sf::Color::Black);
+
+
+
+  while (window.isOpen()) {
+    sf::Event event;
+    window.display();
+    while (window.pollEvent(event)) {
+
+      if(event.type == sf::Event::Closed) {
+        window.close();
+        
+      }
+
+      if (event.type == sf::Event::TextEntered) {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Backspace) && s.size() != 0) {
+          s.pop_back();
+          input.setString(s);
+        } else if (event.text.unicode < 128) {
+          s.push_back((char)event.text.unicode);
+          input.setString(s);
+        }
+      }
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+        inputMoney.push_back(s);
+        s = "";
+      }
+
+
+      window.draw(background);
+      window.draw(title);
+      window.draw(input);
+      
+
+
+    }
+
+  }
+  for (int i = 0; i < inputMoney.size(); i += 2)
+      words.push_back(inputMoney.at(i));
+  set_tallybook_window(target);
+  
+}
+
+void set_mode2() {
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Selection Page");
+
+  // background
+  sf::RectangleShape background(sf::Vector2f(450, 520));
+  background.setFillColor(sf::Color::White);
+
+  // text font
+  sf::Font font;
+  font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
+
+  //Grey blocks
+  sf::RectangleShape G1(sf::Vector2f(135, 45));
+  G1.setFillColor(sf::Color(195, 195, 195));
+  G1.setPosition(65, 165);
+  sf::RectangleShape G2(sf::Vector2f(135, 45));
+  G2.setFillColor(sf::Color(195, 195, 195));
+  G2.setPosition(65, 235);
+  sf::RectangleShape G3(sf::Vector2f(135, 45));
+  G3.setFillColor(sf::Color(195, 195, 195));
+  G3.setPosition(65, 305);
+  sf::RectangleShape G4(sf::Vector2f(135, 45));
+  G4.setFillColor(sf::Color(195, 195, 195));
+  G4.setPosition(245, 165);
+  sf::RectangleShape G5(sf::Vector2f(135, 45));
+  G5.setFillColor(sf::Color(195, 195, 195));
+  G5.setPosition(245, 235);
+  sf::RectangleShape G6(sf::Vector2f(135, 45));
+  G6.setFillColor(sf::Color(195, 195, 195));
+  G6.setPosition(245, 305);
+
+
+  sf::Texture usaflag;
+  usaflag.loadFromFile("usa.jpeg");
+  sf::Texture chinaflag;
+  chinaflag.loadFromFile("china.jpeg");
+  sf::Texture ukflag;
+  ukflag.loadFromFile("uk.jpeg");
+  sf::Texture eurflag;
+  eurflag.loadFromFile("eur.jpeg");
+  sf::Texture ausflag;
+  ausflag.loadFromFile("aus.jpeg");
+  sf::Texture caflag;
+  caflag.loadFromFile("canada.jpeg");
+
+  sf::Sprite usaf;
+  usaf.setTexture(usaflag);
+  usaf.scale(sf::Vector2f(0.170f, 0.167f));
+  usaf.setPosition(135, 240);
+  sf::Sprite chinaf;
+  chinaf.setTexture(chinaflag);
+  chinaf.scale(sf::Vector2f(0.107f, 0.107f));
+  chinaf.setPosition(135, 170);
+  sf::Sprite ukf;
+  ukf.setTexture(ukflag);
+  ukf.scale(sf::Vector2f(0.053f, 0.067f));
+  ukf.setPosition(135, 310);
+  sf::Sprite eurf;
+  eurf.setTexture(eurflag);
+  eurf.scale(sf::Vector2f(0.065f, 0.063f));
+  eurf.setPosition(315, 170);
+  sf::Sprite ausf;
+  ausf.setTexture(ausflag);
+  ausf.scale(sf::Vector2f(0.09f, 0.109f));
+  ausf.setPosition(315, 240);
+  sf::Sprite caf;
+  caf.setTexture(caflag);
+  caf.scale(sf::Vector2f(0.138f, 0.112f));
+  caf.setPosition(315, 310);
+
+  sf::Text Source_c_text;
+  Source_c_text.setFont(font);
+  Source_c_text.setString("Please Choose Your Target Currency");
+  Source_c_text.setCharacterSize(25);
+  Source_c_text.setPosition(10, 100);
+  Source_c_text.setFillColor(sf::Color::Black);
+
+  sf::Text CNY_text;
+  CNY_text.setFont(font);
+  CNY_text.setString("CNY");
+  CNY_text.setCharacterSize(25);
+  CNY_text.setPosition(70, 170);
+  CNY_text.setFillColor(sf::Color::Black);
+
+  sf::Text USD_text;
+  USD_text.setFont(font);
+  USD_text.setString("USD");
+  USD_text.setCharacterSize(25);
+  USD_text.setPosition(70, 240);
+  USD_text.setFillColor(sf::Color::Black);
+
+  sf::Text GBP_text;
+  GBP_text.setFont(font);
+  GBP_text.setString("GBP");
+  GBP_text.setCharacterSize(25);
+  GBP_text.setPosition(70, 310);
+  GBP_text.setFillColor(sf::Color::Black);
+
+  sf::Text EUR_text;
+  EUR_text.setFont(font);
+  EUR_text.setString("EUR");
+  EUR_text.setCharacterSize(25);
+  EUR_text.setPosition(250, 170);
+  EUR_text.setFillColor(sf::Color::Black);
+
+  sf::Text AUD_text;
+  AUD_text.setFont(font);
+  AUD_text.setString("AUD");
+  AUD_text.setCharacterSize(25);
+  AUD_text.setPosition(250, 240);
+  AUD_text.setFillColor(sf::Color::Black);
+
+  sf::Text CAD_text;
+  CAD_text.setFont(font);
+  CAD_text.setString("CAD");
+  CAD_text.setCharacterSize(25);
+  CAD_text.setPosition(250, 310);
+  CAD_text.setFillColor(sf::Color::Black);
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed)
+        window.close();
+      if(event.type == sf::Event::MouseButtonPressed) {
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 165 && event.mouseButton.y <= 210 )) {
+          target = "CNY";
+          window.close();
+          set_mode3();
+        }
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 235 && event.mouseButton.y <= 280 )) {
+          target = "USD";
+          window.close();
+          set_mode3();
+        }
+        if((event.mouseButton.x >= 65 && event.mouseButton.x <= 200) && (event.mouseButton.y >= 305 && event.mouseButton.y <= 350 )) {
+          target = "GBP";
+          window.close();
+          set_mode3();
+        }
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 165 && event.mouseButton.y <= 210 )) {
+          target = "EUR";
+          window.close();
+          set_mode3();
+        }
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 235 && event.mouseButton.y <= 280 )) {
+          target = "AUD";
+          window.close();
+          set_mode3();
+        }
+        if((event.mouseButton.x >= 245 && event.mouseButton.x <= 380) && (event.mouseButton.y >= 305 && event.mouseButton.y <= 350 )) {
+          target = "CAD";
+          window.close();
+          set_mode3();
+        }
+      }
+
+
+      window.draw(background);
+      window.draw(Source_c_text);
+      window.draw(G1);
+      window.draw(G2);
+      window.draw(G3);
+      window.draw(G4);
+      window.draw(G5);
+      window.draw(G6);
+      window.draw(CNY_text);
+      window.draw(USD_text);
+      window.draw(GBP_text);
+      window.draw(EUR_text);
+      window.draw(AUD_text);
+      window.draw(CAD_text);
+      window.draw(usaf);
+      window.draw(chinaf);
+      window.draw(ukf);
+      window.draw(eurf);
+      window.draw(ausf);
+      window.draw(caf);
+      window.display();
+    }
+
+  }
+}
+
+int main() {
+
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Multifunctional-Currency-Converter");
+
+  sf::RectangleShape background(sf::Vector2f(450, 520));
+  background.setFillColor(sf::Color::White);
+  sf::RectangleShape mode1(sf::Vector2f(200, 100));
+  mode1.setFillColor(sf::Color(192, 192, 192));
+  sf::RectangleShape mode2(sf::Vector2f(200, 100));
+  mode2.setFillColor(sf::Color(192, 192, 192));
+  mode1.setPosition(120, 200);
+  mode2.setPosition(120, 350);
+
+
+  sf::Font font;
+  font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
+
+  sf::Text Title;
+  sf::Text mode2s;
+  sf::Text mode1s;
+  Title.setFont(font);
+  Title.setString("Multifunctional Currency Converter");
+  Title.setCharacterSize(25);
+  Title.setPosition(21, 66);
+  Title.setFillColor(sf::Color::Black);
+
+  mode1s.setFont(font);
+  mode1s.setString("Currency Converter");
+  mode1s.setCharacterSize(20);
+  mode1s.setPosition(126, 234);
+  mode1s.setFillColor(sf::Color::Black);
+
+  mode2s.setFont(font);
+  mode2s.setString("Tally Book");
+  mode2s.setCharacterSize(20);
+  mode2s.setPosition(173, 380);
+  mode2s.setFillColor(sf::Color::Black);
+
+  window.draw(background);
+  window.draw(Title);
+  window.draw(mode1);
+  window.draw(mode2);
+  window.draw(mode1s);
+  window.draw(mode2s);
+
+
+
+  while (window.isOpen()) {
+    sf::Event event;
+    window.display();
+    while (window.pollEvent(event)) {
+
+      if(event.type == sf::Event::Closed)
+        window.close();
+      if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+          if((event.mouseButton.x >= 120 && event.mouseButton.x <= 320) && (event.mouseButton.y >= 200 && event.mouseButton.y <= 300 )) {
+            window.close();
+            set_mode1();
+          }
+        }
+        if (event.mouseButton.button == sf::Mouse::Left) {
+          if((event.mouseButton.x >= 120 && event.mouseButton.x <= 320) && (event.mouseButton.y >= 350 && event.mouseButton.y <= 450 )) {
+            window.close();
+            set_mode2();
+          }
+        }
+      }
+
+    }
+  }
+
 
 
   return 0;
