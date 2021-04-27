@@ -1145,6 +1145,13 @@ void set_mode1() {
   Amount_text.setCharacterSize(25);
   Amount_text.setPosition(70, 360);
   Amount_text.setFillColor(sf::Color::Black);
+  
+  sf::Text infotext;
+  infotext.setFont(font);
+  infotext.setString("Click Enter After Typing");
+  infotext.setCharacterSize(25);
+  infotext.setPosition(75, 470);
+  infotext.setFillColor(sf::Color::Black);
 
 
   while (window.isOpen()) {
@@ -1206,6 +1213,7 @@ void set_mode1() {
       window.draw(caf);
       window.draw(Amount_text);
       window.draw(input);
+      window.draw(infotext);
       window.display();
 
     }
