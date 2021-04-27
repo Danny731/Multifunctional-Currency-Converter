@@ -1238,7 +1238,12 @@ void set_mode3() {
   input.setPosition(115, 250);
   input.setFillColor(sf::Color::Black);
 
-
+  sf::Text info;
+  info.setFont(font);
+  info.setString("Close The Window When Finishing Input");
+  info.setFillColor(sf::Color::Black);
+  info.setCharacterSize(20);
+  info.setPosition(25,350);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -1269,6 +1274,7 @@ void set_mode3() {
       window.draw(background);
       window.draw(title);
       window.draw(input);
+      window.draw(info);
       
 
 
