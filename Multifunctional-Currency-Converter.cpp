@@ -1243,15 +1243,29 @@ string s;
   words.setPosition(20, 105);
   input.setCharacterSize(50);
   input.setFont(font);
-  input.setPosition(115, 250);
+  input.setPosition(115, 200);
   input.setFillColor(sf::Color::Black);
+
+  sf::Text enterinfo;
+  enterinfo.setFont(font);
+  enterinfo.setString("Click Enter After Each Input");
+  enterinfo.setFillColor(sf::Color::Black);
+  enterinfo.setCharacterSize(20);
+  enterinfo.setPosition(68,325);
+
+  sf::Text maxinfo;
+  maxinfo.setFont(font);
+  maxinfo.setString("Only 10 Inputs Can Be Displayed");
+  maxinfo.setFillColor(sf::Color::Black);
+  maxinfo.setCharacterSize(20);
+  maxinfo.setPosition(60,400);
 
   sf::Text info;
   info.setFont(font);
-  info.setString("Close The Window When Finishing Input");
+  info.setString("Close The Window When Finish Inputing");
   info.setFillColor(sf::Color::Black);
   info.setCharacterSize(20);
-  info.setPosition(25,350);
+  info.setPosition(40,474);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -1274,15 +1288,17 @@ string s;
       }
 
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-        inputMoney.push_back(s);
+         inputMoney.push_back(s);
         s = "";
       }
 
 
       window.draw(background);
-      window.draw(title);
+      window.draw(words);
       window.draw(input);
       window.draw(info);
+      window.draw(maxinfo);
+      window.draw(enterinfo);
       
 
 
