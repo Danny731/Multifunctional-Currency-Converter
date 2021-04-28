@@ -638,7 +638,7 @@ void set_tallybook_window(string target) {
   string currency10 = CUR.at(9);
 
   // window
-  sf::RenderWindow window(sf::VideoMode(450, 520), "TallyBook");
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Tally Book");
 
   // background
   sf::RectangleShape background(sf::Vector2f(450, 520));
