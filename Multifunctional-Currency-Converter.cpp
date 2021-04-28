@@ -166,7 +166,7 @@ void set_transform_window(string source, float source_amount) {
   float USD_RATE, CNY_RATE, GBP_RATE, EUR_RATE, AUD_RATE, CAD_RATE;
 
 // Insert function
-  sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Convertor");
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Currency Converter");
   // set background
   sf::RectangleShape background(sf::Vector2f(450.f, 520.f));
   background.setFillColor(sf::Color::White);
@@ -638,7 +638,7 @@ void set_tallybook_window(string target) {
   string currency10 = CUR.at(9);
 
   // window
-  sf::RenderWindow window(sf::VideoMode(450, 520), "Bean Counter");
+  sf::RenderWindow window(sf::VideoMode(450, 520), "Tally Book");
 
   // background
   sf::RectangleShape background(sf::Vector2f(450, 520));
