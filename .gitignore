@@ -16,3 +16,6 @@ compile_commands.json
 *.dll
 *.lib
 *.pdb
+
+# Local build helper (machine-specific paths)
+build.bat

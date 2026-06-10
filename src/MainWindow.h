@@ -2,11 +2,9 @@
 
 #include <QMainWindow>
 
-class QComboBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QTableWidget;
+#include "core/CurrencyConverter.h"
+
+class QTabWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -16,16 +14,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
 
 private:
-    QWidget *createConverterPage();
-    QWidget *createTallyBookPage();
+    void setupMockRates();
 
-    QComboBox *sourceCurrencyCombo = nullptr;
-    QLineEdit *amountEdit = nullptr;
-    QLabel *converterStatusLabel = nullptr;
-    QTableWidget *converterResultTable = nullptr;
-
-    QComboBox *targetCurrencyCombo = nullptr;
-    QLineEdit *entryEdit = nullptr;
-    QLabel *tallyStatusLabel = nullptr;
-    QTableWidget *tallyTable = nullptr;
+    CurrencyConverter m_converter;
+    QTabWidget *m_tabs = nullptr;
 };

@@ -12,6 +12,11 @@ qt_add_executable(currency_converter
     src/main.cpp
     src/MainWindow.cpp
     src/MainWindow.h
+    src/core/Currency.h
+    src/core/CurrencyConverter.h
+    src/core/CurrencyConverter.cpp
+    src/ui/ConverterPage.h
+    src/ui/ConverterPage.cpp
 )
 
 target_link_libraries(currency_converter
