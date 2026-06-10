@@ -118,9 +118,9 @@ void ConverterPage::onConvert()
 
     if (missingRates > 0) {
         m_statusLabel->setText(
-            tr("Converted using mock rates. %n rate(s) missing.", nullptr, missingRates));
+            tr("Conversion complete. %n rate(s) missing.", nullptr, missingRates));
     } else {
-        m_statusLabel->setText(tr("Converted successfully (mock rates)."));
+        m_statusLabel->setText(tr("Converted successfully."));
     }
 }
 

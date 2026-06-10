@@ -15,8 +15,15 @@ qt_add_executable(currency_converter
     src/core/Currency.h
     src/core/CurrencyConverter.h
     src/core/CurrencyConverter.cpp
+    src/core/TallyEntry.h
+    src/core/TallyBook.h
+    src/core/TallyBook.cpp
+    src/core/ExchangeRateService.h
+    src/core/ExchangeRateService.cpp
     src/ui/ConverterPage.h
     src/ui/ConverterPage.cpp
+    src/ui/TallyBookPage.h
+    src/ui/TallyBookPage.cpp
 )
 
 target_link_libraries(currency_converter

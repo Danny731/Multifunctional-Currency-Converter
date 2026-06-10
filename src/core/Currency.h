@@ -10,7 +10,9 @@ enum class Currency {
     GBP,
     EUR,
     AUD,
-    CAD
+    CAD,
+    JPY,
+    SGD
 };
 
 // Returns the ISO 4217 code string, e.g. "CNY".
@@ -23,6 +25,8 @@ inline QString currencyToString(Currency c)
     case Currency::EUR: return QStringLiteral("EUR");
     case Currency::AUD: return QStringLiteral("AUD");
     case Currency::CAD: return QStringLiteral("CAD");
+    case Currency::JPY: return QStringLiteral("JPY");
+    case Currency::SGD: return QStringLiteral("SGD");
     }
     return {};
 }
@@ -40,6 +44,8 @@ inline Currency currencyFromString(const QString &s, bool *ok = nullptr)
     if (upper == u"EUR") return Currency::EUR;
     if (upper == u"AUD") return Currency::AUD;
     if (upper == u"CAD") return Currency::CAD;
+    if (upper == u"JPY") return Currency::JPY;
+    if (upper == u"SGD") return Currency::SGD;
     if (ok) *ok = false;
     return Currency::CNY; // default
 }
@@ -48,7 +54,8 @@ inline Currency currencyFromString(const QString &s, bool *ok = nullptr)
 inline QList<Currency> supportedCurrencies()
 {
     return {Currency::CNY, Currency::USD, Currency::GBP,
-            Currency::EUR, Currency::AUD, Currency::CAD};
+            Currency::EUR, Currency::AUD, Currency::CAD,
+            Currency::JPY, Currency::SGD};
 }
 
 // Returns all supported currency codes as a QStringList.

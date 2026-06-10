@@ -2,8 +2,9 @@
 
 #include "core/Currency.h"
 #include "ui/ConverterPage.h"
+#include "ui/TallyBookPage.h"
 
-#include <QLabel>
+#include <QStatusBar>
 #include <QTabWidget>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,46 +13,58 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Multifunctional Currency Converter"));
     resize(720, 520);
 
+    // Use mock rates as initial fallback
     setupMockRates();
 
     m_tabs = new QTabWidget(this);
 
-    auto *converterPage = new ConverterPage(this);
-    converterPage->setConverter(&m_converter);
-    m_tabs->addTab(converterPage, tr("Currency Converter"));
+    m_converterPage = new ConverterPage(this);
+    m_converterPage->setConverter(&m_converter);
+    m_tabs->addTab(m_converterPage, tr("Currency Converter"));
 
-    // Tally Book tab placeholder — will be replaced in Step 4
-    auto *tallyPlaceholder = new QWidget(this);
-    auto *label = new QLabel(tr("Tally Book — coming soon."), tallyPlaceholder);
-    label->setAlignment(Qt::AlignCenter);
-    m_tabs->addTab(tallyPlaceholder, tr("Tally Book"));
+    m_tallyPage = new TallyBookPage(this);
+    m_tallyPage->setConverter(&m_converter);
+    m_tabs->addTab(m_tallyPage, tr("Tally Book"));
 
     setCentralWidget(m_tabs);
+
+    // Status bar for rate info
+    m_statusBar = statusBar();
+    m_statusBar->showMessage(tr("Using mock exchange rates. Fetching live rates..."));
+
+    // Connect rate service
+    connect(&m_rateService, &ExchangeRateService::ratesUpdated,
+            this, &MainWindow::onRatesUpdated);
+    connect(&m_rateService, &ExchangeRateService::fetchFailed,
+            this, &MainWindow::onFetchFailed);
+
+    // Fetch live rates from Frankfurter API
+    fetchLiveRates();
 }
 
 void MainWindow::setupMockRates()
 {
     // Mock exchange rates (approximate, relative to USD)
-    // Rate means: 1 USD = X units of target currency
+    // Used as fallback when network is unavailable
     const double usdRates[] = {
-        7.25,   // CNY
-        1.0,    // USD
-        0.79,   // GBP
-        0.92,   // EUR
-        1.54,   // AUD
-        1.37    // CAD
+        7.25,     // CNY
+        1.0,      // USD
+        0.79,     // GBP
+        0.92,     // EUR
+        1.54,     // AUD
+        1.37,     // CAD
+        144.50,   // JPY
+        1.34      // SGD
     };
     const auto currencies = supportedCurrencies();
     for (int i = 0; i < currencies.size(); ++i) {
         const double usdToTarget = usdRates[i];
-        // USD -> target
         m_converter.setRate(Currency::USD, currencies[i], usdToTarget);
-        // target -> USD (inverse)
         if (usdToTarget > 0.0)
             m_converter.setRate(currencies[i], Currency::USD, 1.0 / usdToTarget);
     }
 
-    // Cross rates: from -> USD -> to
+    // Cross rates
     for (auto from : currencies) {
         for (auto to : currencies) {
             if (from == to) continue;
@@ -63,4 +76,26 @@ void MainWindow::setupMockRates()
             }
         }
     }
+}
+
+void MainWindow::fetchLiveRates()
+{
+    m_rateService.fetchRates(Currency::USD);
+}
+
+void MainWindow::onRatesUpdated()
+{
+    m_converter = m_rateService.converter();
+    m_converterPage->setConverter(&m_converter);
+    m_tallyPage->setConverter(&m_converter);
+
+    m_statusBar->showMessage(
+        tr("Live rates loaded (source: Frankfurter API, date: %1)")
+            .arg(m_rateService.lastUpdateDate()));
+}
+
+void MainWindow::onFetchFailed(const QString &reason)
+{
+    m_statusBar->showMessage(
+        tr("Could not load live rates: %1 — using mock rates.").arg(reason));
 }
