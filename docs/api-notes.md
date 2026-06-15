@@ -57,6 +57,26 @@ A JSON object with a `rates` map and a `date` string:
 
 Only `rates` and `date` are consumed by the app. `amount` and `base` are ignored.
 
+## Publication Schedule (why the date can lag)
+
+The `date` field is the **publication date of the rates, not the date you queried**. Frankfurter's rates are sourced from the **European Central Bank (ECB) reference rates**, which follow a fixed publishing calendar:
+
+- Published **once per business day**, around **16:00 Frankfurt time** (CET in winter / CEST in summer).
+- **Not published on weekends** (Saturday/Sunday).
+- **Not published on ECB/TARGET holidays** (e.g. Good Friday, Easter Monday, May 1, Dec 25/26).
+
+Consequence: on a Monday — or any day right after a non-publishing day — the latest available rates are still from the **previous Friday**, and the response `date` reflects that. This is expected behavior shared by every ECB-sourced API, **not a bug** in this app; the app is displaying the genuinely latest available data.
+
+Worked example (verified against the live endpoint): querying on **Monday 2026-06-15** returned:
+
+```json
+{ "date": "2026-06-12", "rates": { "CNY": 6.7623, "EUR": 0.86453, "JPY": 160.2 } }
+```
+
+`2026-06-12` is the preceding Friday. Sat 6/13 and Sun 6/14 had no publication, and Monday's rates do not appear until ~16:00 Frankfurt time (≈ 22:00 Beijing time in summer) on 6/15. Restarting the app after that publication time yields `2026-06-15`.
+
+If continuous (weekend/holiday) updates are required, swap to a provider that publishes every day (see [Swapping providers](#swapping-providers)).
+
 ## Rate Processing
 
 Raw API rates are direct `base → target` values. In `ExchangeRateService::onReplyFinished()` the converter is populated with three layers so any currency pair resolves in a single lookup:
