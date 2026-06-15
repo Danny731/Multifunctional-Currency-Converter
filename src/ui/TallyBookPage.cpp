@@ -1,6 +1,7 @@
 #include "TallyBookPage.h"
 
 #include "../core/Currency.h"
+#include "../storage/TallyStorage.h"
 
 #include <QComboBox>
 #include <QDoubleValidator>
@@ -21,6 +22,54 @@ TallyBookPage::TallyBookPage(QWidget *parent)
 void TallyBookPage::setConverter(CurrencyConverter *converter)
 {
     m_converter = converter;
+
+    // Load persisted entries once a converter is available so their
+    // convertedAmount values can be recalculated against current rates.
+    if (!m_loaded) {
+        m_loaded = true;
+        loadState();
+    }
+
+    // Refresh converted totals when rates change (mock -> live, etc.).
+    if (m_converter && m_tallyBook.count() > 0) {
+        m_tallyBook.recalculate(currentTargetCurrency(), *m_converter);
+        refreshTable();
+        updateTotalLabel();
+    }
+}
+
+void TallyBookPage::loadState()
+{
+    QList<TallyEntry> entries;
+    Currency target = Currency::USD;
+    if (!TallyStorage::load(entries, target))
+        return; // nothing stored or corrupt: leave a fresh tally book
+
+    m_tallyBook.setEntries(entries);
+
+    // Restore the target currency selection. Block signals so this does not
+    // trigger an immediate (and pointless) write of what we just read.
+    const int index = m_targetCurrencyCombo->findData(static_cast<int>(target));
+    m_targetCurrencyCombo->blockSignals(true);
+    if (index >= 0)
+        m_targetCurrencyCombo->setCurrentIndex(index);
+    m_targetCurrencyCombo->blockSignals(false);
+
+    if (m_converter)
+        m_tallyBook.recalculate(currentTargetCurrency(), *m_converter);
+
+    refreshTable();
+    updateTotalLabel();
+}
+
+void TallyBookPage::saveState()
+{
+    TallyStorage::save(m_tallyBook.entries(), currentTargetCurrency());
+}
+
+Currency TallyBookPage::currentTargetCurrency() const
+{
+    return static_cast<Currency>(m_targetCurrencyCombo->currentData().toInt());
 }
 
 void TallyBookPage::setupUi()
@@ -31,6 +80,17 @@ void TallyBookPage::setupUi()
     layout->addWidget(new QLabel(tr("Target currency (for total)"), this));
     m_targetCurrencyCombo = new QComboBox(this);
     populateCurrencyCombo(m_targetCurrencyCombo);
+    // When the target currency changes, recompute converted amounts and the
+    // total in the new currency, then persist the selection.
+    connect(m_targetCurrencyCombo, &QComboBox::currentIndexChanged,
+            this, [this]() {
+                if (m_converter && m_tallyBook.count() > 0) {
+                    m_tallyBook.recalculate(currentTargetCurrency(), *m_converter);
+                    refreshTable();
+                    updateTotalLabel();
+                }
+                saveState();
+            });
     layout->addWidget(m_targetCurrencyCombo);
 
     // Amount input
@@ -138,6 +198,7 @@ void TallyBookPage::onAddEntry()
 
     refreshTable();
     updateTotalLabel();
+    saveState();
     m_statusLabel->setText(tr("Entry added."));
 }
 
@@ -160,6 +221,7 @@ void TallyBookPage::onDeleteSelected()
 
     refreshTable();
     updateTotalLabel();
+    saveState();
     m_statusLabel->setText(tr("Entry deleted."));
 }
 
@@ -176,6 +238,7 @@ void TallyBookPage::onClearAll()
         m_tallyBook.clear();
         refreshTable();
         updateTotalLabel();
+        saveState();
         m_statusLabel->setText(tr("All entries cleared."));
     }
 }

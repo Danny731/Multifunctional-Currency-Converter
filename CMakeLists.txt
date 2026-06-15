@@ -20,6 +20,8 @@ qt_add_executable(currency_converter
     src/core/TallyBook.cpp
     src/core/ExchangeRateService.h
     src/core/ExchangeRateService.cpp
+    src/storage/TallyStorage.h
+    src/storage/TallyStorage.cpp
     src/ui/ConverterPage.h
     src/ui/ConverterPage.cpp
     src/ui/TallyBookPage.h

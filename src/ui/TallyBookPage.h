@@ -32,8 +32,17 @@ private:
     void refreshTable();
     void updateTotalLabel();
 
+    // Reads persisted entries + target currency from disk and restores them.
+    // Called once, after a converter is available.
+    void loadState();
+    // Writes current entries + target currency to disk.
+    void saveState();
+    // Returns the currency currently selected in the target combo.
+    Currency currentTargetCurrency() const;
+
     CurrencyConverter *m_converter = nullptr;
     TallyBook m_tallyBook;
+    bool m_loaded = false;
 
     QComboBox *m_targetCurrencyCombo = nullptr;
     QLineEdit *m_amountEdit = nullptr;

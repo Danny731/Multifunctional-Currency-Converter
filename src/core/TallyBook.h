@@ -21,6 +21,11 @@ public:
     // Clears all entries.
     void clear();
 
+    // Replaces all entries with the given list, without any conversion.
+    // Intended for restoring persisted data; follow with recalculate()
+    // to refresh convertedAmount values against current rates.
+    void setEntries(const QList<TallyEntry> &entries);
+
     // Returns all entries.
     const QList<TallyEntry> &entries() const;
 

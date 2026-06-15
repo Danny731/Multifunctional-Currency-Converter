@@ -26,6 +26,11 @@ void TallyBook::clear()
     m_entries.clear();
 }
 
+void TallyBook::setEntries(const QList<TallyEntry> &entries)
+{
+    m_entries = entries;
+}
+
 const QList<TallyEntry> &TallyBook::entries() const
 {
     return m_entries;
